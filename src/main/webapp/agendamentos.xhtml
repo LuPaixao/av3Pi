@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Agendamento</title>
+</h:head>
+<h:body style="background-color: #d9d9ec;">
+		<h:form id="form">
+		
+		
+		<p:messages id="messages" showDetail="true" closable="true" >
+			<p:autoUpdate/>
+		</p:messages>
+		
+		
+	<h1 style="font-family: Arial, sans-serif; font-weight: 600;">Agendamentos</h1>
+	<h3 style="font-family: Arial, sans-serif; font-weight: normal;">Confira
+		abaixo todos os agendamentos!</h3>
+
+
+		<p:dataTable id="tabela" value="#{agendamentoBean.lista}" var="agenda"
+			selectionMode="single"
+			selection="#{agendamentoBean.agendaSelecionada}"
+			rowKey="#{agenda.id}" editable="true">
+			
+			 <p:ajax event="rowEdit" listener="#{agendamentoBean.edit(agenda)}"
+				update=":form:tabela" />
+
+
+				<p:ajax event="rowSelect" update=":form:detalhesAgendamento"
+				oncomplete="PF('detalhesDialog').show()" />
+
+			<p:column headerText="ID">
+				<p:outputLabel value="#{agenda.id}" />
+			</p:column>
+
+
+			<p:column headerText="Paciente">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{agenda.paciente}" />
+					</f:facet>
+					
+					
+					<f:facet name="input">
+						<p:inputText value="#{agenda.paciente}" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+
+			<p:column headerText="Médico">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{agenda.medico}">
+						</h:outputText>
+					</f:facet>
+					<f:facet name="input">
+						<p:selectOneMenu value="#{agenda.medico}">
+							<f:selectItem itemLabel="Selecione um médico" itemValue="" />
+							<f:selectItem itemLabel="Dr. João" itemValue="Dr. João" />
+							<f:selectItem itemLabel="Dra. Maria" itemValue="Dra. Maria" />
+							<f:selectItem itemLabel="Dr. Pedro" itemValue="Dr. Pedro" />
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+
+			<p:column headerText="Data - Hora">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{agenda.dataHoraConsulta}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="pt_BR"
+								timeZone="GMT-03:00" />
+						</h:outputText>
+					</f:facet>
+					<f:facet name="input">
+					<p:datePicker id="time"
+						value="#{agenda.dataHoraConsulta}" showIcon="true"  showButtonBar="true" showTime="true" timeInput="true"  required="true" requiredMessage="Campo obrigatório" mindate="#{agendamentoBean.dataAtual}"/>
+						
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			
+
+			<p:column headerText="Visualizar">
+				<p:commandButton icon="pi pi-search" title="Visualizar"  onclick="PF('detalhesDialog').show();"  />
+			</p:column>
+
+			<p:column headerText="Editar"
+				style="width: 100px; text-align: center;">
+				<p:rowEditor />
+			</p:column>
+
+			<p:column headerText="Excluir">
+				<p:commandButton style="background-color:red" icon="pi pi-trash" title="Excluir"
+					actionListener="#{agendamentoBean.delete(agenda.id)}"
+					update=":form:tabela" />
+			</p:column>
+
+		</p:dataTable>
+
+		<p:dialog width="30%" id="dialog" header="Detalhes do Agendamento"
+			widgetVar="detalhesDialog" modal="true" showEffect="fade"
+			hideEffect="fade" resizable="false">
+
+			<h:panelGrid id="detalhesAgendamento" columns="2" cellpadding="5">
+				<h:outputText value="ID:" style="font-weight: bold" />
+				<h:outputText value="#{agendamentoBean.agendaSelecionada.id}" />
+				
+				<h:outputText value="Paciente:" style="font-weight: bold" />
+				<h:outputText value="#{agendamentoBean.agendaSelecionada.paciente}" />
+
+				<h:outputText value="Médico:" style="font-weight: bold" />
+				<h:outputText value="#{agendamentoBean.agendaSelecionada.medico}" />
+
+				<h:outputText value="Data - Hora:" style="font-weight: bold" />
+
+				<h:outputText
+					value="#{agendamentoBean.agendaSelecionada.dataHoraConsulta}">
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="pt_BR"
+						timeZone="GMT-03:00" />
+				</h:outputText>
+			</h:panelGrid>
+			<p:column headerText="Excluir">
+				<p:commandButton  action="agendamento" icon="pi pi-trash"
+					title="Excluir"
+					actionListener="#{agendamentoBean.delete(agendamentoBean.agendaSelecionada.id)}"
+					/>
+			</p:column>
+		</p:dialog>
+
+
+		<div style="margin-top: 20px">
+			<p:link outcome="gerar_agendamento" value="Voltar"
+				style="font-size: 20" />
+		</div>
+
+		<div style="text-align: right;">
+			<p:commandButton value="Contar Agendas"
+				actionListener="#{agendamentoBean.counterAgendas}"
+				oncomplete="PF('countDialog').show()"
+				update="quantidadeAgendasDialog" />
+
+			<p:dialog id="countDialog" header="Contagem de Agendas"
+				widgetVar="countDialog" modal="true">
+
+				<h:panelGrid columns="1" id="quantidadeAgendasDialog">
+					<h:outputText
+						value="Total de Agendas: #{agendamentoBean.quantidadeAgendas}" />
+				</h:panelGrid>
+			</p:dialog>
+		</div>
+
+
+
+	</h:form>
+
+
+</h:body>
+</html>
