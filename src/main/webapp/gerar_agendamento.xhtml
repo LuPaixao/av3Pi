@@ -41,11 +41,8 @@
 					style=" width: 25%; border: 2px solid #669bbc;">
 
 					<p:outputLabel value="Médico" />
-					<p:selectOneMenu value="#{agendamentoBean.agenda.medico}"  required="true" requiredMessage="Campo obrigatório">
-						<f:selectItem itemLabel="Selecione um médico" itemValue="" />
-						<f:selectItem itemLabel="Dr. João" itemValue="Dr. João" />
-						<f:selectItem itemLabel="Dra. Maria" itemValue="Dra. Maria" />
-						<f:selectItem itemLabel="Dr. Pedro" itemValue="Dr. Pedro" />
+					<p:selectOneMenu value="#{agendamentoBean.idMedicoSelecionado}" required="true" requiredMessage="Campo obrigatório">
+						<f:selectItems value="#{agendamentoBean.medicos}" var="medico" itemLabel="#{medico.nome}" itemValue="#{medico.id}" />
 					</p:selectOneMenu>
 
 
@@ -76,8 +73,6 @@
 					<p:datePicker id="time"
 						value="#{agendamentoBean.agenda.dataHoraConsulta}" showIcon="true"  showButtonBar="true" showTime="true" timeInput="true"  required="true" requiredMessage="Campo obrigatório" mindate="#{agendamentoBean.dataAtual}"/>
 
-
-
 				</p:panelGrid>
 
 				<div style="margin-top: 20px">
@@ -88,17 +83,9 @@
 				</div>
 
 
-
-
-
-
 			</div>
 
 		</div>
-
-
-
-
 
 	</h:form>
 </h:body>

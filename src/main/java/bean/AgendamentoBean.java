@@ -10,10 +10,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
-import org.primefaces.PrimeFaces;
-
 import dao.AgendaDao;
+import dao.MedicoDao;
 import entities.Agenda;
+import entities.Medico;
 import enuns.StatusAgendamento;
 
 @ManagedBean
@@ -24,6 +24,13 @@ public class AgendamentoBean {
 	private Agenda agendaSelecionada;
 	private Long quantidadeAgendas;
 	private Date dataAtual;
+	
+	private List<Medico> medicos;
+	private Integer idMedicoSelecionado;
+	
+	public AgendamentoBean() {
+		this.medicos = MedicoDao.listarMedicos();
+	}
 
 	public Long getQuantidadeAgendas() {
 		return quantidadeAgendas;
@@ -42,6 +49,10 @@ public class AgendamentoBean {
 		try {
 			if (!AgendaDao.verificarAgendamentoExistente(agenda)) {
 				agenda.setStatus(StatusAgendamento.AGENDADO);
+				
+				Medico medicoSelecionado = MedicoDao.buscarPorId(idMedicoSelecionado);
+				agenda.setMedico(medicoSelecionado);
+				
 				AgendaDao.save(agenda);
 				agenda = new Agenda();
 				showMessage("Agendamento realizado com sucesso!", "");
@@ -128,7 +139,7 @@ public class AgendamentoBean {
 		}
 		return lista;
 	}
-
+	
 	public void setLista(List<Agenda> lista) {
 		this.lista = lista;
 	}
@@ -148,6 +159,7 @@ public class AgendamentoBean {
 	@PostConstruct
 	public void init() {
 		dataAtual = new Date();
+		
 	}
 
 	public Date getDataAtual() {
@@ -157,5 +169,16 @@ public class AgendamentoBean {
 	public void setDataAtual(Date dataAtual) {
 		this.dataAtual = dataAtual;
 	}
+	
+	public List<Medico> getMedicos() {
+		return medicos;
+	}
+	
+	public Integer getIdMedicoSelecionado() {
+		return idMedicoSelecionado;
+	}
 
+	public void setIdMedicoSelecionado(Integer idMedicoSelecionado) {
+		this.idMedicoSelecionado = idMedicoSelecionado;
+	}
 }

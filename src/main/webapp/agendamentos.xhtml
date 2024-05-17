@@ -80,19 +80,15 @@
 			</p:column>
 
 
-			<p:column headerText="Médico">
+			<p:column headerText="Medico">
 				<p:cellEditor>
 					<f:facet name="output">
-						<h:outputText value="#{agenda.medico}">
-						</h:outputText>
+						<h:outputText value="#{agenda.medico.nome}" />
 					</f:facet>
+					
+					
 					<f:facet name="input">
-						<p:selectOneMenu value="#{agenda.medico}">
-							<f:selectItem itemLabel="Selecione um médico" itemValue="" />
-							<f:selectItem itemLabel="Dr. João" itemValue="Dr. João" />
-							<f:selectItem itemLabel="Dra. Maria" itemValue="Dra. Maria" />
-							<f:selectItem itemLabel="Dr. Pedro" itemValue="Dr. Pedro" />
-						</p:selectOneMenu>
+						<p:inputText value="#{agenda.medico.nome}" />
 					</f:facet>
 				</p:cellEditor>
 			</p:column>

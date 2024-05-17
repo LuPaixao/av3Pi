@@ -8,11 +8,29 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<title>Admnistrador</title>
+	<title>Administrador</title>
 </h:head>
 <h:body style="background-color: #d9d9ec;">
-	
-	
-	
+
+	<div style="margin-bottom: 20px;">
+		<h:form id="formulario">
+			<p:panelGrid columns="2"
+				style=" width: 25%;  border: 2px solid #669bbc;">
+
+				<p:outputLabel value="Medico" />
+				<p:inputText id="medico" value="#{medicoBean.medico.nome}"
+					required="true" requiredMessage="Campo obrigatório" />
+
+			</p:panelGrid>
+			<div style="margin-top: 20px">
+				<p:commandButton  action="#{medicoBean.salvar}"
+					value="Salvar" update="formulario"
+					style="background-color: #1b2144" />
+			</div>
+
+
+		</h:form>
+	</div>
+
 </h:body>
 </html>
