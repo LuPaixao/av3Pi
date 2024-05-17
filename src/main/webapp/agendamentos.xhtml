@@ -32,14 +32,9 @@
 			 <p:ajax event="rowEdit" listener="#{agendamentoBean.edit(agenda)}"
 				update=":form:tabela" />
 
-
-				<p:ajax event="rowSelect" update=":form:detalhesAgendamento"
-				oncomplete="PF('detalhesDialog').show()" />
-
 			<p:column headerText="ID">
 				<p:outputLabel value="#{agenda.id}" />
 			</p:column>
-
 
 			<p:column headerText="Paciente">
 				<p:cellEditor>
@@ -50,6 +45,36 @@
 					
 					<f:facet name="input">
 						<p:inputText value="#{agenda.paciente}" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			
+			<p:column headerText="Email" style="width: 220px">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{agenda.email}" />
+					</f:facet>
+					
+					
+					<f:facet name="input">
+						<p:inputText value="#{agenda.email}" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			
+			<p:column headerText="Clínica">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{agenda.clinica}" />
+					</f:facet>
+					
+					<f:facet name="input">
+						<p:selectOneMenu value="#{agendamentoBean.agenda.clinica}"  required="true" requiredMessage="Campo obrigatório">
+							<f:selectItem itemLabel="Selecione uma Clínica" itemValue="" />
+							<f:selectItem itemLabel="Hapvida Dom Luís" itemValue="Hapvida Dom Luís" />
+							<f:selectItem itemLabel="Hapvida Luis de França" itemValue="Hapvida Luis de França" />
+							<f:selectItem itemLabel="Hapvida Antônio Prudente" itemValue="Hapvida Antônio Prudente" />
+						</p:selectOneMenu>
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
@@ -89,14 +114,34 @@
 				</p:cellEditor>
 			</p:column>
 			
+			<p:column headerText="Status">
+				<p:outputLabel value="#{agenda.status.descricao}" />
+			</p:column>
+			
 
 			<p:column headerText="Visualizar">
-				<p:commandButton icon="pi pi-search" title="Visualizar"  onclick="PF('detalhesDialog').show();"  />
+				<p:commandButton 
+					icon="pi pi-search" 
+					title="Visualizar"  
+					update=":form:detalhesAgendamento"
+					onclick="PF('detalhesDialog').show()"
+					action="#{agendamentoBean.showModalDetalhes(agenda)}"
+					/>
 			</p:column>
 
 			<p:column headerText="Editar"
 				style="width: 100px; text-align: center;">
 				<p:rowEditor />
+			</p:column>
+			
+			<p:column headerText="Cancelar Consulta">
+				<p:commandButton 
+					style="background-color:red" 
+					icon="pi pi-times-circle" 
+					title="Cancelar Consulta"
+					actionListener="#{agendamentoBean.cancelaConsulta(agenda.id)}"
+					update=":form:tabela" 
+				/>
 			</p:column>
 
 			<p:column headerText="Excluir">
@@ -117,24 +162,32 @@
 				
 				<h:outputText value="Paciente:" style="font-weight: bold" />
 				<h:outputText value="#{agendamentoBean.agendaSelecionada.paciente}" />
+				
+				<h:outputText value="Email" style="font-weight: bold" />
+				<h:outputText value="#{agendamentoBean.agendaSelecionada.email}" />
 
+				<h:outputText value="Clínica" style="font-weight: bold" />
+				<h:outputText value="#{agendamentoBean.agendaSelecionada.clinica}" />
+				
 				<h:outputText value="Médico:" style="font-weight: bold" />
 				<h:outputText value="#{agendamentoBean.agendaSelecionada.medico}" />
-
-				<h:outputText value="Data - Hora:" style="font-weight: bold" />
+				
+				<h:outputText value="Data Hora da consulta:" style="font-weight: bold" />
 
 				<h:outputText
-					value="#{agendamentoBean.agendaSelecionada.dataHoraConsulta}">
+					value="#{agendamentoBean.agendaSelecionada.dataHoraConsulta}">	
 					<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="pt_BR"
 						timeZone="GMT-03:00" />
+						
+				<h:outputText value="Status:" style="font-weight: bold" />
+				<h:outputText value="#{agendamentoBean.agendaSelecionada.status.descricao}" />
+				
+				<h:outputText value="Status" style="font-weight: bold" />
+				<h:outputText value="#{agendamentoBean.agendaSelecionada.status.descricao}" />
+						
 				</h:outputText>
+				
 			</h:panelGrid>
-			<p:column headerText="Excluir">
-				<p:commandButton  action="agendamento" icon="pi pi-trash"
-					title="Excluir"
-					actionListener="#{agendamentoBean.delete(agendamentoBean.agendaSelecionada.id)}"
-					/>
-			</p:column>
 		</p:dialog>
 
 

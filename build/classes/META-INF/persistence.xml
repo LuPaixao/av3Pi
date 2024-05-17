@@ -6,9 +6,9 @@
 	<persistence-unit name="primeiroPU">
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
-			 <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost/AGENDAMENTOSAV1" />
+			 <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost/avPi" />
 			<property name="javax.persistence.jdbc.user" value="postgres" />
-			<property name="javax.persistence.jdbc.password" value="123456789" />
+			<property name="javax.persistence.jdbc.password" value="123456" />
 
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />

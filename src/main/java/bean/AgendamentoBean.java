@@ -10,8 +10,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.PrimeFaces;
+
 import dao.AgendaDao;
 import entities.Agenda;
+import enuns.StatusAgendamento;
 
 @ManagedBean
 public class AgendamentoBean {
@@ -38,6 +41,7 @@ public class AgendamentoBean {
 	public String save() {
 		try {
 			if (!AgendaDao.verificarAgendamentoExistente(agenda)) {
+				agenda.setStatus(StatusAgendamento.AGENDADO);
 				AgendaDao.save(agenda);
 				agenda = new Agenda();
 				showMessage("Agendamento realizado com sucesso!", "");
@@ -70,8 +74,8 @@ public class AgendamentoBean {
 	            System.out.println("FOI EDITADO");
 	            return "agendamentos";
 	        } else {
-	            showMessage("Erro! Já existe um agendamento para a mesma data, hora e médico", "");
-	            System.out.println("NAO FOI EDITADO PQ JA EXISTE UM AGENDAMENTO COM DATA/HORA/MEDICO IGUAL");
+	            showMessage("Erro! Já existe um agendamento para a mesma data, hora, médico e clínica", "");
+	            System.out.println("NAO FOI EDITADO PQ JA EXISTE UM AGENDAMENTO COM DATA/HORA/MEDICO/CLINICA IGUAL");
 	            return "agendamentos";
 	        }
 	    } catch (Exception e) {
@@ -91,6 +95,18 @@ public class AgendamentoBean {
 		lista = AgendaDao.listar();
 		System.out.println("agenda deletada" + id);
 		return "agendamentos";
+	}
+	
+	public String cancelaConsulta(int id) {
+		
+		AgendaDao.updateStatus(id, StatusAgendamento.CANCELADO);
+		System.out.println("Agenda cancelada" + id);
+		return "Agenda Cancelada";
+		
+	}
+	
+	public void showModalDetalhes(Agenda agenda) {
+		this.agendaSelecionada = agenda;
 	}
 
 	public Agenda getAgendaById(int id) {
